@@ -32,14 +32,14 @@ ${save btn locator}     //*[@data-qa='button-success']
     Заповнити decision.number
     Заповнити decision.date
 
-    Заповнити object.description
-    Заповнити object.kind
-    Заповнити object.count
-    Заповнити object.unit
-    Заповнити object.postalcode
-    Заповнити object.country
-    Заповнити object.city
-    Заповнити object.address
+    Заповнити item.description
+    Заповнити item.kind
+    Заповнити item.count
+    Заповнити item.unit
+    Заповнити item.postalcode
+    Заповнити item.country
+    Заповнити item.city
+    Заповнити item.streetaddress
 
     Створити об'єкт у реєстрі
 
@@ -50,10 +50,10 @@ ${save btn locator}     //*[@data-qa='button-success']
 
     Перевірити decision
 
-    Перевірити object.description
-    Перевірити object.kind
-    Перевірити object.amount
-    Перевірити object.address
+    Перевірити item.description
+    Перевірити item.kind
+    Перевірити item.amount
+    Перевірити item.streetaddress
 
 
 *** Keywords ***
@@ -134,15 +134,15 @@ Postcondition
 	Set To Dictionary  ${data['decision']}  date  ${date}
 
 
-Заповнити object.description
+Заповнити item.description
 	${description}  create_sentence  20
 	${selector}  Set Variable  xpath=//*[@data-qa='input-items-description']//*[@autocomplete="off"]
 	Заповнити текстове поле  ${selector}  ${description}
 	${dict}  Create Dictionary  description=${description}
-	Set To Dictionary  ${data}  object  ${dict}
+	Set To Dictionary  ${data}  item  ${dict}
 
 
-Заповнити object.kind
+Заповнити item.kind
     ${selector}  Set Variable  xpath=//*[@data-qa='select-items-object-kind']
     Scroll Page To Element XPATH  ${selector}
     Click Element  ${selector}
@@ -150,50 +150,50 @@ Postcondition
     Click Element  ${selector}/div[@class='ivu-select-dropdown']//*[contains(text(),'102')]
     ${kind}  Get Text  ${selector}//*[@class='ivu-select-selected-value']
    	Should Not Be Empty  ${kind}
-	Set To Dictionary  ${data['object']}  kind  ${kind}
+	Set To Dictionary  ${data['item']}  kind  ${kind}
 
 
-Заповнити object.count
+Заповнити item.count
 	${first}  random_number  1  100000
 	${second}  random_number  1  1000
     ${count}  Evaluate  str(round(float(${first})/float(${second}), 5))
 	${selector}  Set Variable  xpath=//*[@data-qa='input-item-count']//*[@autocomplete="off"]
 	Input Text  ${selector}  ${count}
-	Set To Dictionary  ${data['object']}  count  ${count}
+	Set To Dictionary  ${data['item']}  count  ${count}
 
 
-Заповнити object.unit
+Заповнити item.unit
     ${selector}  Set Variable  xpath=//*[@data-qa='select-item-unit']
     Scroll Page To Element XPATH  ${selector}
 	${unit}  Wait Until Keyword Succeeds  30  3  Вибрати та повернути елемент з випадаючого списка  ${selector}  метри квадратні
-	Set To Dictionary  ${data['object']}  unit  ${unit}
+	Set To Dictionary  ${data['item']}  unit  ${unit}
 
 
-Заповнити object.postalcode
+Заповнити item.postalcode
 	${postalcode}  random_number  10000  99999
 	${selector}  Set Variable  xpath=//div[contains(@class,'address-label') and not(contains(@class,'offset '))]//input[@type='text']
 	Заповнити текстове поле  ${selector}  ${postalcode}
-	Set To Dictionary  ${data['object']}  postalcode  ${postalcode}
+	Set To Dictionary  ${data['item']}  postal code  ${postalcode}
 
 
-Заповнити object.country
+Заповнити item.country
    	${selector}  Set Variable  xpath=//div[@class='ivu-col ivu-col-span-sm-9']
 	Scroll Page To Element XPATH  ${selector}
     ${country}  Wait Until Keyword Succeeds  30  3  Вибрати та повернути елемент з випадаючого списка  ${selector}  Україна
-    Set To Dictionary  ${data['object']}  country  ${country}
+    Set To Dictionary  ${data['item']}  country  ${country}
 
 
-Заповнити object.city
+Заповнити item.city
    	${selector}  Set Variable  xpath=//div[@class='ivu-col ivu-col-span-sm-10']
     ${city}  Wait Until Keyword Succeeds  30  3  Вибрати та повернути елемент з випадаючого списка  ${selector}  Київ
-    Set To Dictionary  ${data['object']}  city  ${city}
+    Set To Dictionary  ${data['item']}  city  ${city}
 
 
-Заповнити object.address
+Заповнити item.streetaddress
     ${address}  create_sentence  2
    	${selector}  Set Variable  xpath=//*[@data-qa='component-item-address']/div[contains(@class,'ivu-form-item-required')]//input
    	Заповнити текстове поле  ${selector}  ${address}
-    Set To Dictionary  ${data['object']}  address  ${address}
+    Set To Dictionary  ${data['item']}  street address  ${address}
 
 
 Вибрати та повернути елемент з випадаючого списка
@@ -239,32 +239,32 @@ Postcondition
     Should Contain  ${is}  ${date}
 
 
-Перевірити object.description
+Перевірити item.description
     ${is}  Get Text  (//*[@data-qa='item']//*[@data-qa='value'])[1]
-    ${should}  Get From Dictionary  ${data['object']}  description
+    ${should}  Get From Dictionary  ${data['item']}  description
     Should Be Equal  ${is}  ${should}
 
 
-Перевірити object.kind
+Перевірити item.kind
     ${is}  Get Text  (//*[@data-qa='item']//*[@data-qa='value'])[2]
-    ${should}  Get From Dictionary  ${data['object']}  kind
+    ${should}  Get From Dictionary  ${data['item']}  kind
     Should Be Equal  ${is}  ${should}
 
 
-Перевірити object.amount
+Перевірити item.amount
     ${is}  Get Text  (//*[@data-qa='item']//*[@data-qa='value'])[3]
-    ${count}  Get From Dictionary  ${data['object']}  count
-    ${unit}  Get From Dictionary  ${data['object']}  unit
+    ${count}  Get From Dictionary  ${data['item']}  count
+    ${unit}  Get From Dictionary  ${data['item']}  unit
     Should Contain  ${is}  ${count}
     Should Contain  ${is}  ${unit}
 
 
-Перевірити object.address
+Перевірити item.streetaddress
     ${is}  Get Text  (//*[@data-qa='item']//*[@data-qa='value'])[4]
-    ${postalcode}  Get From Dictionary  ${data['object']}  postalcode
-    ${country}  Get From Dictionary  ${data['object']}  country
-    ${city}  Get From Dictionary  ${data['object']}  city
-    ${address}  Get From Dictionary  ${data['object']}  address
+    ${postalcode}  Get From Dictionary  ${data['item']}  postalcode
+    ${country}  Get From Dictionary  ${data['item']}  country
+    ${city}  Get From Dictionary  ${data['item']}  city
+    ${address}  Get From Dictionary  ${data['item']}  address
     Should Contain  ${is}  ${postalcode}
     Should Contain  ${is}  ${country}
     Should Contain  ${is}  ${city}

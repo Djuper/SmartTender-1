@@ -196,11 +196,22 @@ Resource  test_open_trade.robot
 	[Arguments]  ${selector}  ${text}
 	Click Element  ${selector}
 	Sleep  .5
-	Clear Element Text  ${selector}
+	Очистити поле  ${selector}
+	#Clear Element Text  ${selector}
 	Input Text  ${selector}  ${text}
 	${got}  Get Element Attribute  ${selector}  value
 	Press Key  ${selector}  \\13
 	Should Be Equal  ${got}  ${text}
+
+
+Очистити поле
+    [Arguments]    ${selector}
+    :FOR    ${i}    IN RANGE    999999
+    \  ${text}  Get Element Attribute  ${selector}  value
+    \  ${length}  Get Length  ${text}
+    \  Exit For Loop If    ${length} == 0
+    \  Double Click Element  ${selector}
+    \  Press Key  ${selector}  \\8
 
 
 Вибрати та повернути елемент у випадаючому списку
